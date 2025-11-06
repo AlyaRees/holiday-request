@@ -7,13 +7,15 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in); 
 
-    static String checkAndUpdateDate(String message) {
-        String date = "";
+    static String checkAndUpdateDate(String message, String date) {
+        if (isValidFormat(date)) {
+            return date;
+        } else {
         do {
             askForDateAgain(message);
             date = scanner.next();
            } while (!isValidFormat(date));
-
+        }
            return date;
     }
 
@@ -53,13 +55,13 @@ public class Main {
 
             log("\nEnter holiday you want to book:\n(Use the format DD/MM/YY)\n\nDate from:\n");
             String startDate = scanner.next();
-            
-            startDate = checkAndUpdateDate("\n\nDate from:\n");
-            
+
+            startDate = checkAndUpdateDate("\n\nDate from:\n", startDate);
+
             log("\nDate to:\n");
             String endDate = scanner.next();
 
-            endDate = checkAndUpdateDate("\nDate to:\n");
+            endDate = checkAndUpdateDate("\nDate to:\n", endDate);
 
             log("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
             String areDatesCorrect = scanner.next();
@@ -67,6 +69,8 @@ public class Main {
             while (areDatesCorrect.equalsIgnoreCase("N")) {
             log("\nEnter holiday you want to book:\n(Use the format DD/M/YY)\n\nDate from:\n");
             startDate = scanner.next();
+
+            log("\nDate to:\n");
             endDate = scanner.next();
             log("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
 
@@ -83,8 +87,7 @@ public class Main {
 }
     public static void main(String[] args) {
 
-        // tells scanner object to read strings using newline separator only (return key)
-        scanner.useDelimiter("\n");
+        scanner.useDelimiter("\n"); // Set delimiter to newline to capture full lines including spaces
 
         log("\nSelect (1) or (2)\n\n 1 - Would you like to book holiday?\n 2 - Would you like to check holiday approval status?\n");
         

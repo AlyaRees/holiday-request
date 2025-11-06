@@ -18,6 +18,7 @@ public class MainTest {
 
     @Test
 
+    // Tests that inputted date has been entered in the correct format
     public void testCheckAndUpdateDate() {
 
         // Store original standard input for later restoration
@@ -31,11 +32,12 @@ public class MainTest {
 
             // redirect standard input to use simulated input
             System.setIn(in);
-            String result = Main.checkAndUpdateDate("\nDate from\n");
+            String result = Main.checkAndUpdateDate("\nDate from\n", "04/01/26");
 
             assertEquals("04/01/26", result);
 
         } finally {
+            // Restore original standard input
             System.setIn(originalIn);
         }
     }
