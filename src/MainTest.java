@@ -10,9 +10,9 @@ public class MainTest {
 
     public void testIsValidFormat() {
         
-        assertTrue(Main.isValidFormat("04/11/2025"));
-        assertTrue(Main.isValidFormat("27/12/2025"));
-        assertFalse(Main.isValidFormat("hey"));
+        assertTrue(App.isValidFormat("04/11/2025"));
+        assertTrue(App.isValidFormat("27/12/2025"));
+        assertFalse(App.isValidFormat("hey"));
 
     }
 
@@ -32,7 +32,7 @@ public class MainTest {
 
             // redirect standard input to use simulated input
             System.setIn(in);
-            String result = Main.checkAndUpdateDate("\nDate from\n", "04/01/2026");
+            String result = App.checkAndUpdateDate("\nDate from\n", "04/01/2026");
 
             assertEquals("04/01/2026", result);
 
