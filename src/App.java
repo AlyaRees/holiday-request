@@ -3,6 +3,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class App {
 
@@ -42,7 +43,7 @@ public class App {
 
     static void saveDetails(String name, String number, String startDate, String endDate) {
            try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-           fileWriter.write("Name: " + name + "\nEmployee Number: " + number + "\nDate: " + startDate + " " + endDate);
+           fileWriter.write("Name: " + name + "\nEmployee Number: " + number + "\nDate: " + startDate + " " + endDate + "\n");
            fileWriter.close();
            statusReport("Successfully wrote to file.");
         } catch (IOException error) {
@@ -52,20 +53,27 @@ public class App {
     }
 
     static void getRequestedHoliday() {
+
         File fileObject = new File(fileName);
         ArrayList<String> dates = new ArrayList<>();
+
         try (Scanner fileReader = new Scanner(fileObject)) {
             while (fileReader.hasNextLine()) {
                 String data = fileReader.nextLine();
-                dates.add(data);
+                if (data.contains("Date:")) {
+                    data = data.replace("Date: ", "");
+                    dates.add(data);
+                }
             }
-            dates.stream()
-            .filter(line -> line.startsWith("Date:"))
-            .forEach(line -> display(line.substring(6) + "\n"));
+            // converts the dates arraylist to a stream
+            Stream<String[]> allDates = dates.stream()
+            .map(line -> line.split(" "));
+
+            allDates.forEach(line -> display("From " + line[0] + " to " + line[1] + " - PENDING APPROVAL" + "\n")); 
+            fileReader.close();
 
         } catch (FileNotFoundException error) {
-            statusReport("An error occurred.");
-            error.printStackTrace();
+            statusReport("No holiday has been submitted.\n");
         }
     }
 
@@ -108,6 +116,7 @@ public class App {
             statusReport("Invalid input.");
         }
 }
+
 }
 
 // first issue -> scanner doesn't work the way I thought it did... 
