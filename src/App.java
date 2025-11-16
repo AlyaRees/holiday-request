@@ -1,15 +1,22 @@
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class App {
+
+    static String fileName = "HolidayReq.txt";
 
     static void userPrompt(String message) {
     System.out.println(message);
 }
 
     static void statusReport(String message) {
+    System.out.println(message);
+}
+
+    static void display(String message) {
     System.out.println(message);
 }
 
@@ -34,12 +41,30 @@ public class App {
     }
 
     static void saveDetails(String name, String number, String startDate, String endDate) {
-           try (FileWriter fileWriter = new FileWriter("HolidayReq.txt")) {
-           fileWriter.write(name + "\n" + number + "\n" + startDate + " " + endDate);
+           try (FileWriter fileWriter = new FileWriter(fileName, true)) {
+           fileWriter.write("Name: " + name + "\nEmployee Number: " + number + "\nDate: " + startDate + " " + endDate);
            fileWriter.close();
            statusReport("Successfully wrote to file.");
         } catch (IOException error) {
-            System.out.println("Error writing to file.");
+            statusReport("Error writing to file.");
+            error.printStackTrace();
+        }
+    }
+
+    static void getRequestedHoliday() {
+        File fileObject = new File(fileName);
+        ArrayList<String> dates = new ArrayList<>();
+        try (Scanner fileReader = new Scanner(fileObject)) {
+            while (fileReader.hasNextLine()) {
+                String data = fileReader.nextLine();
+                dates.add(data);
+            }
+            dates.stream()
+            .filter(line -> line.startsWith("Date:"))
+            .forEach(line -> display(line.substring(6) + "\n"));
+
+        } catch (FileNotFoundException error) {
+            statusReport("An error occurred.");
             error.printStackTrace();
         }
     }
@@ -65,7 +90,7 @@ public class App {
             String areDatesCorrect = scanner.next();
 
             while (areDatesCorrect.equalsIgnoreCase("N")) {
-            userPrompt("\nEnter holiday you want to book:\n(Use the format DD/M/YY)\n\nDate from:\n");
+            userPrompt("\nEnter holiday you want to book:\n(Use the format DD/M/YYYY)\n\nDate from:\n");
             startDate = scanner.next();
 
             userPrompt("\nDate to:\n");

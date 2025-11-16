@@ -14,7 +14,8 @@ public class Main {
         if (chosenOption == 1) {
             App.optionOneInteraction(scanner);
             } else {
-            App.statusReport("\nHoliday approval status:\n\nNo holiday has been submitted.\n");
+            App.statusReport("\nHoliday approval status:\n");
+            App.getRequestedHoliday();
         }
     }
 }
