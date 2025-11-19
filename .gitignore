@@ -2,5 +2,5 @@
 bin/
 /src/*.class
 /.idea
-./holiday-request.iml
 out/
+/holiday-request.iml
