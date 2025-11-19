@@ -7,52 +7,50 @@ import java.util.stream.Stream;
 
 public class App {
 
+    UserInteractions userInteractions = new UserInteractions();
+
     static String fileName = "HolidayReq.txt";
 
-    static void userPrompt(String message) {
-    System.out.println(message);
-}
-
     static void statusReport(String message) {
-    System.out.println(message);
-}
+        System.out.println(message);
+    }
 
     static void display(String message) {
-    System.out.println(message);
-}
+        System.out.println(message);
+    }
 
-    static String checkAndUpdateDate(String message, String date, Scanner scanner) {
+    String checkAndUpdateDate(String message, String date) {
         while (!isValidFormat(date)) {
             askForDateAgain(message);
-            date = scanner.next();
+            date = userInteractions.getUserInputString();
         }
-           return date;
+        return date;
     }
 
-    static void askForDateAgain(String message) {
-                userPrompt("\nInvalid format. Try again.");
-                userPrompt(message);
+    void askForDateAgain(String message) {
+        userInteractions.userPrompt("\nInvalid format. Try again.");
+        userInteractions.userPrompt(message);
     }
 
-    static boolean isValidFormat(String date) {
-     Pattern dateFormat = Pattern.compile("^\\d{2}\\/\\d{2}\\/\\d{4}$");
-       Matcher checkFormat = dateFormat.matcher(date);
+    boolean isValidFormat(String date) {
+        Pattern dateFormat = Pattern.compile("^\\d{2}\\/\\d{2}\\/\\d{4}$");
+        Matcher checkFormat = dateFormat.matcher(date);
 
-       return checkFormat.matches();
+        return checkFormat.matches();
     }
 
-    static void saveDetails(String name, String number, String startDate, String endDate) {
-           try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-           fileWriter.write("Name: " + name + "\nEmployee Number: " + number + "\nDate: " + startDate + " " + endDate + "\n");
-           fileWriter.close();
-           statusReport("Successfully wrote to file.");
+    void saveDetails(String name, String number, String startDate, String endDate) {
+        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
+            fileWriter.write("Name: " + name + "\nEmployee Number: " + number + "\nDate: " + startDate + " " + endDate + "\n");
+            fileWriter.close();
+            statusReport("Successfully wrote to file.");
         } catch (IOException error) {
             statusReport("Error writing to file.");
             error.printStackTrace();
         }
     }
 
-    static void getRequestedHoliday() {
+    void getRequestedHoliday() {
 
         File fileObject = new File(fileName);
         ArrayList<String> dates = new ArrayList<>();
@@ -67,9 +65,9 @@ public class App {
             }
             // converts the dates arraylist to a stream
             Stream<String[]> allDates = dates.stream()
-            .map(line -> line.split(" "));
+                    .map(line -> line.split(" "));
 
-            allDates.forEach(line -> display("From " + line[0] + " to " + line[1] + " - PENDING APPROVAL" + "\n")); 
+            allDates.forEach(line -> display("From " + line[0] + " to " + line[1] + " - PENDING APPROVAL" + "\n"));
             fileReader.close();
 
         } catch (FileNotFoundException error) {
@@ -77,45 +75,47 @@ public class App {
         }
     }
 
-    static void optionOneInteraction(Scanner scanner) {
-        userPrompt("\nEnter your full name:\n");
-            String userFullname = scanner.next();
+    void optionOneInteraction() {
+        userInteractions.userPrompt("\nEnter your full name:\n");
+        String userFullname = userInteractions.getUserInputString();
 
-            userPrompt("\nEnter your employee number:\n");
-            String employeeNum = scanner.next();
 
-            userPrompt("\nEnter holiday you want to book:\n(Use the format DD/MM/YY)\n\nDate from:\n");
-            String startDate = scanner.next();
+        userInteractions.userPrompt("\nEnter your employee number:\n");
+        String employeeNum = userInteractions.getUserInputString();
 
-            startDate = checkAndUpdateDate("\n\nDate from:\n", startDate, scanner);
+        userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/MM/YY)\n\nDate from:\n");
+        String startDate = userInteractions.getUserInputString();
 
-            userPrompt("\nDate to:\n");
-            String endDate = scanner.next();
+        startDate = checkAndUpdateDate("\n\nDate from:\n", startDate);
 
-            endDate = checkAndUpdateDate("\nDate to:\n", endDate, scanner);
+        userInteractions.userPrompt("\nDate to:\n");
+        String endDate = userInteractions.getUserInputString();
+        ;
 
-            userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
-            String areDatesCorrect = scanner.next();
+        endDate = checkAndUpdateDate("\nDate to:\n", endDate);
 
-            while (areDatesCorrect.equalsIgnoreCase("N")) {
-            userPrompt("\nEnter holiday you want to book:\n(Use the format DD/M/YYYY)\n\nDate from:\n");
-            startDate = scanner.next();
+        userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
+        String areDatesCorrect = userInteractions.getUserInputString();
 
-            userPrompt("\nDate to:\n");
-            endDate = scanner.next();
-            userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
+        while (areDatesCorrect.equalsIgnoreCase("N")) {
+            userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/M/YYYY)\n\nDate from:\n");
+            startDate = userInteractions.getUserInputString();
 
-            areDatesCorrect = scanner.next();
-    }
+            userInteractions.userPrompt("\nDate to:\n");
+            endDate = userInteractions.getUserInputString();
+            userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
 
-    if (areDatesCorrect.equalsIgnoreCase("Y")) {
+            areDatesCorrect = userInteractions.getUserInputString();
+        }
+
+        if (areDatesCorrect.equalsIgnoreCase("Y")) {
             saveDetails(userFullname, employeeNum, startDate, endDate);
             statusReport("Details saved.");
-        
+
         } else {
             statusReport("Invalid input.");
         }
-}
+    }
 
 }
 

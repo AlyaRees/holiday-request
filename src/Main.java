@@ -1,21 +1,17 @@
-import java.util.Scanner;
-
 public class Main {
-    
+
     public static void main(String[] args) {
-        
-        Scanner scanner = new Scanner(System.in);
-        scanner.useDelimiter("\n"); // Set delimiter to newline to capture full lines including spaces
 
-        App.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n 2 - Check holiday approval status\n");
-        
-        int chosenOption = scanner.nextInt();
+        App app = new App();
+        UserInteractions userInteractions = new UserInteractions();
 
-        if (chosenOption == 1) {
-            App.optionOneInteraction(scanner);
-            } else {
-            App.statusReport("\nHoliday approval status:\n");
-            App.getRequestedHoliday();
+        UserInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n 2 - Check holiday approval status\n");
+
+        if (userInteractions.getUserInputInt() == 1) {
+            app.optionOneInteraction();
+        } else {
+            app.statusReport("\nHoliday approval status:\n");
+            app.getRequestedHoliday();
         }
     }
 }
@@ -24,12 +20,10 @@ public class Main {
 
 // With duplication - add a base class to reduce duplication
 
-// in the main method - instansiate and 'go'
+// in the main method - instantiate and 'go'
 
 // you can use some switches (where appropriate) to replace if-else
 
-// you need to create base classes, use inheritence
-
-// close scanner
+// you need to create base classes, use inheritance
 
 // further down the line maybe mock the scanner ?
