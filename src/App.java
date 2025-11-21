@@ -76,6 +76,7 @@ public class App {
     }
 
     void optionOneInteraction() {
+
         userInteractions.userPrompt("\nEnter your full name:\n");
         String userFullname = userInteractions.getUserInputString();
 

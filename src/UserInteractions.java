@@ -1,20 +1,21 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class UserInteractions {
 
-    Scanner scanner = new Scanner(System.in);
+    Scanner customScanner = new Scanner(System.in).useDelimiter("\n");
 
     static void userPrompt(String message) {
         System.out.println(message);
     }
 
     int getUserInputInt() {
-        int chosenOption = scanner.nextInt();
+        int chosenOption = customScanner.nextInt();
         return chosenOption;
     }
 
     String getUserInputString() {
-        String userInput = scanner.next();
+        String userInput = customScanner.next();
         return userInput;
     }
 }
