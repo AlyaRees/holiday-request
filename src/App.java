@@ -5,6 +5,7 @@ public class App {
 
     UserInteractions userInteractions = new UserInteractions();
     FileHandling fileHandling = new FileHandling();
+    DateHandling dateHandling = new DateHandling();
 
     static void statusReport(String message) {
         System.out.println(message);
@@ -12,26 +13,6 @@ public class App {
 
     static void display(String message) {
         System.out.println(message);
-    }
-
-    String checkAndUpdateDate(String message, String date) {
-        while (!isValidFormat(date)) {
-            askForDateAgain(message);
-            date = userInteractions.getUserInputString();
-        }
-        return date;
-    }
-
-    void askForDateAgain(String message) {
-        userInteractions.userPrompt("\nInvalid format. Try again.");
-        userInteractions.userPrompt(message);
-    }
-
-    boolean isValidFormat(String date) {
-        Pattern dateFormat = Pattern.compile("^\\d{2}\\/\\d{2}\\/\\d{4}$");
-        Matcher checkFormat = dateFormat.matcher(date);
-
-        return checkFormat.matches();
     }
 
     void optionOneInteraction() {
@@ -46,13 +27,13 @@ public class App {
         userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/MM/YY)\n\nDate from:\n");
         String startDate = userInteractions.getUserInputString();
 
-        startDate = checkAndUpdateDate("\n\nDate from:\n", startDate);
+        startDate = dateHandling.checkAndUpdateDate("\n\nDate from:\n", startDate);
 
         userInteractions.userPrompt("\nDate to:\n");
         String endDate = userInteractions.getUserInputString();
         ;
 
-        endDate = checkAndUpdateDate("\nDate to:\n", endDate);
+        endDate = dateHandling.checkAndUpdateDate("\nDate to:\n", endDate);
 
         userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
         String areDatesCorrect = userInteractions.getUserInputString();
