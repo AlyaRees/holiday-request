@@ -1,15 +1,10 @@
-import java.util.*;
-import java.io.*;
-import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class App {
 
     UserInteractions userInteractions = new UserInteractions();
-
-    static String fileName = "HolidayReq.txt";
+    FileHandling fileHandling = new FileHandling();
 
     static void statusReport(String message) {
         System.out.println(message);
@@ -37,42 +32,6 @@ public class App {
         Matcher checkFormat = dateFormat.matcher(date);
 
         return checkFormat.matches();
-    }
-
-    void saveDetails(String name, String number, String startDate, String endDate) {
-        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-            fileWriter.write("Name: " + name + "\nEmployee Number: " + number + "\nDate: " + startDate + " " + endDate + "\n");
-            fileWriter.close();
-            statusReport("Successfully wrote to file.");
-        } catch (IOException error) {
-            statusReport("Error writing to file.");
-            error.printStackTrace();
-        }
-    }
-
-    void getRequestedHoliday() {
-
-        File fileObject = new File(fileName);
-        ArrayList<String> dates = new ArrayList<>();
-
-        try (Scanner fileReader = new Scanner(fileObject)) {
-            while (fileReader.hasNextLine()) {
-                String data = fileReader.nextLine();
-                if (data.contains("Date:")) {
-                    data = data.replace("Date: ", "");
-                    dates.add(data);
-                }
-            }
-            // converts the dates arraylist to a stream
-            Stream<String[]> allDates = dates.stream()
-                    .map(line -> line.split(" "));
-
-            allDates.forEach(line -> display("From " + line[0] + " to " + line[1] + " - PENDING APPROVAL" + "\n"));
-            fileReader.close();
-
-        } catch (FileNotFoundException error) {
-            statusReport("No holiday has been submitted.\n");
-        }
     }
 
     void optionOneInteraction() {
@@ -110,7 +69,7 @@ public class App {
         }
 
         if (areDatesCorrect.equalsIgnoreCase("Y")) {
-            saveDetails(userFullname, employeeNum, startDate, endDate);
+            fileHandling.saveDetails(userFullname, employeeNum, startDate, endDate);
             statusReport("Details saved.");
 
         } else {
@@ -118,6 +77,22 @@ public class App {
         }
     }
 
+    void run() {
+
+        userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n 2 - Check holiday approval status\n");
+
+        // replace with switch statement to tighten the constraints for user input here (should be 1 or 2 only)
+
+        if (userInteractions.getUserInputInt() == 1) {
+            optionOneInteraction();
+        } else {
+            statusReport("\nHoliday approval status:\n");
+            fileHandling.getRequestedHoliday();
+        }
+        userInteractions.closeScanner();
+
+        // userInteractions.customScanner.next(); -> should throw an error because we're trying to use the scanner after closing it!
+    }
 }
 
 // first issue -> scanner doesn't work the way I thought it did... 

@@ -3,16 +3,8 @@ public class Main {
     public static void main(String[] args) {
 
         App app = new App();
-        UserInteractions userInteractions = new UserInteractions();
 
-        UserInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n 2 - Check holiday approval status\n");
-
-        if (userInteractions.getUserInputInt() == 1) {
-            app.optionOneInteraction();
-        } else {
-            app.statusReport("\nHoliday approval status:\n");
-            app.getRequestedHoliday();
-        }
+        app.run();
     }
 }
 
