@@ -1,3 +1,6 @@
 /src/HolidayReq.txt
 bin/
 /src/*.class
+/.idea
+out/
+*.iml
