@@ -20,8 +20,7 @@ public class ReadFromFile extends HandlesFile {
             }
             // The catch block is run if the file doesn't exist or is empty
         } catch (FileNotFoundException e) {
-            App.statusReport("No holiday has been submitted.\n");
-            e.printStackTrace();
+            App.statusReport("No holiday has been submitted.\n" + e);
             // close the file reader if it's been used.
         } finally {
             if (fileReader != null) {

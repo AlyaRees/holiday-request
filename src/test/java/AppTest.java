@@ -1,17 +1,29 @@
 import org.holidayReq.*;
 import org.junit.Test;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.logging.FileHandler;
-
 import static org.junit.Assert.*;
 
 public class AppTest {
 
+    App app = new App();
+
     @Test
 
     public void testGetFileContent() {
-        // use mocks
+
+        // Not implemented yet
+
+        Path pathOfFile = Paths.get("HolidayReq.txt");
+
+        try {
+            Files.deleteIfExists(pathOfFile);
+        } catch (IOException e) {
+            app.statusReport("" + e);
+        }
     }
 
     @Test
@@ -29,8 +41,6 @@ public class AppTest {
     @Test
 
     public void testAddNumberIDs() {
-
-        App app = new App();
 
         ArrayList<String> testList = new ArrayList<>();
 

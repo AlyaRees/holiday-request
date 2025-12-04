@@ -1,5 +1,6 @@
 package org.holidayReq;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class App {
@@ -39,13 +40,17 @@ public class App {
     public ArrayList<String> addNumberIDs(ArrayList<String> list) {
         int index = 0;
         do {
-            list.set(index, (index + 1) + " - " + list.get(index));
-            index++;
+            try {
+                list.set(index, (index + 1) + " - " + list.get(index));
+                index++;
+            } catch (IndexOutOfBoundsException e) {
+                System.exit(1);
+            }
         } while (index < list.size());
         return list;
     }
 
-    static void statusReport(String message) {
+    public static void statusReport(String message) {
         System.out.println(message);
     }
 
@@ -122,7 +127,7 @@ public class App {
         // The selected request is updated and displayed
         holidayInteraction.updateHolidayStatus(requestIndex, selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");
-        display(getHolidayRequest(requestIndex));
+        display(getHolidayRequest(selectedApproveOrDecline));
     }
 
     public void run() {

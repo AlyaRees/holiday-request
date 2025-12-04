@@ -12,6 +12,6 @@ public class HandleLogin {
             App.statusReport("\nIncorrect password entered.\n");
             enteredPassword = userInteractions.returnUserInputStr();
         }
-        App.statusReport("\nLogin successful.\n");
+        App.statusReport("\nLogin successful.");
     }
 }
