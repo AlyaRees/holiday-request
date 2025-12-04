@@ -9,20 +9,23 @@ public class App {
     WriteToFile writer = new WriteToFile();
     DateHandling dateHandling = new DateHandling();
     UpdateFile holidayInteraction = new UpdateFile();
+    HandleLogin handleLogin = new HandleLogin();
 
-    String validateInput(int index, ArrayList<String> fileContent) {
+    // better to use error handling here rather than logic that handles invalid input
+    // logic -> conditionals and loops
+    // I used -> error handling and recursion
+    // logic -> if index != 0 OR index > number of entries OR index < number of entries, handle error and repeat process. What if user enters a minus number? Try-catch handles this. This would be harder to achieve with logic.
+
+    private String selectHoliday(int index) {
         String selectedRequest = "";
-        do {
-            display("\nSelect holiday to review:\n");
-            try {
-                index = userInteractions.returnUserInputInt();
-                selectedRequest = getHolidayRequest(index);
-            } catch (IndexOutOfBoundsException e) {
-                statusReport("Enter numbers within the scope of the selection only.");
 
-            }
-        } while (index > fileContent.size() || index == 0);
-
+        try {
+            selectedRequest = getHolidayRequest(index);
+        } catch (IndexOutOfBoundsException e) {
+            statusReport("Please select from the provided options. " + e);
+            index = userInteractions.returnUserInputInt();
+            selectHoliday(index);
+        }
         return selectedRequest;
     }
 
@@ -56,6 +59,7 @@ public class App {
         list.forEach(item -> display(item));
     }
 
+    // private access modifier used here as this method will only be called within this class (App)
     private void optionOneInteraction() {
 
         UserInteractions.userPrompt("\nEnter your full name:\n");
@@ -101,24 +105,16 @@ public class App {
 
     private void optionThreeInteraction() {
 
-        UserInteractions.userPrompt("\nEnter admin password: \n");
-        String enteredPassword = userInteractions.returnUserInputStr();
+        handleLogin.adminLogin();
 
-        String password = "password";
-
-        while (!enteredPassword.equals(password)) {
-            statusReport("\nIncorrect password entered.\n");
-            enteredPassword = userInteractions.returnUserInputStr();
-        }
-        statusReport("\nLogin successful.\n");
-
-        ArrayList<String> fileContent = reader.getFileContent();
+        display("\nSelect holiday to review:\n");
         // Gets the file content, puts it into an array list and adds number IDs
+        ArrayList<String> fileContent = reader.getFileContent();
         displayElements(addNumberIDs(fileContent));
 
         int requestIndex = userInteractions.returnUserInputInt();
 
-        String selectedRequest = validateInput(requestIndex, fileContent);
+        String selectedRequest = selectHoliday(requestIndex);
 
         display("\nYou selected:\n");
         display(selectedRequest);
@@ -131,11 +127,11 @@ public class App {
 
     public void run() {
 
-        UserInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n " +
+        userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n " +
                 "2 - Check holiday approval status\n " +
                 "3 - Approve holiday (admin only)\n");
 
-        // replace with switch statement to tighten the constraints for user input here (should be 1 or 2 only)
+        // added a switch statement to tighten the constraints for user input (selection choice should only be 1, 2 or 3)
 
         switch (userInteractions.returnUserInputInt()) {
             case 1 -> optionOneInteraction();
@@ -160,3 +156,4 @@ public class App {
 // issue with getting code tangled up!
 // issue - didn't stop to read and understand code! commit message - Refactored checkAndUpdateDate 1dad081
 // change the date format to dd/mm/yyyy
+// Struggled to solve a problem. Stopped and went through the call stack of the code, beginning with the entry point (Main method, app.run, selected option etc.) Read through and contemplated on each part. It works is the bare minimum. Does it actually make sense? Could it be better?

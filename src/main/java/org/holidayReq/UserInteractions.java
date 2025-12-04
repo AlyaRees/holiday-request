@@ -24,7 +24,4 @@ class UserInteractions {
 
 // Use an interface when two different classes share some commonality but are otherwise different.
 
-// Remove this abstract class - doesn't improve the code. Use inheritance somewhere else.
-
-
-// Have I used enough 'abstract' and inheritance principles in my code?
+// Have I used enough 'abstract' and inheritance principles in my code? - No.
