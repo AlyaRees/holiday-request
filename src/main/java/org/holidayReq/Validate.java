@@ -1,5 +1,7 @@
 package org.holidayReq;
 
+import java.util.Scanner;
+
 public class Validate {
 
     UserInteractions userInteractions = new UserInteractions();
@@ -12,10 +14,10 @@ public class Validate {
         return date;
     }
 
-    public String checkAndUpdate(String employeeNum) {
+    public String checkAndUpdate(String employeeNum, Scanner scanner) {
         while (!validateFormat(employeeNum)) {
             userInteractions.userPrompt("\nInvalid entry. Employee numbers have six digits. Try again.\n");
-            employeeNum = userInteractions.getUserInputStr();
+            employeeNum = scanner.next();
         }
         return employeeNum;
     }
