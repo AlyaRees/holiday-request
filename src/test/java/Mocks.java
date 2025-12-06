@@ -14,11 +14,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class Mocks {
 
-    Validate validate = new Validate();
-    String sixDigitEmployeeNum = "112233";
-    String invalidEmployeeNum = "-990023";
-    String invalidInput = "pretamanger";
-
     @Test
     public void testGetFileContent() {
 
@@ -29,20 +24,19 @@ public class Mocks {
 
     public void testCheckAndUpdateWithValidInput() {
 
-        // Don't mock validateFormat. We're testing how this behaves with the while loop.
-        // Only mock getUserInput to return valid or invalid entries (depending on the tests).
-
-        UserInteractions mockUserInteractions = mock(UserInteractions.class);
-        UserInteractions userInteractions = new UserInteractions();
-        Validate mockValidate = mock(Validate.class);
-
         // Employee numbers must be six digits long.
 
-        // call with valid input
-        validate.checkAndUpdate(sixDigitEmployeeNum, new Scanner(System.in));
+        Validate validate = new Validate();
+        String sixDigitEmployeeNum = "112233";
+        String invalidEmployeeNum = "-990023";
+        String invalidInput = "pretamanger";
+        Scanner mockScanner = mock(Scanner.class);
+        when(mockScanner.next()).thenReturn(sixDigitEmployeeNum);
 
-        // expect userPrompt to not be called
-        verify(mockUserInteractions, times(0)).getUserInputStr();
+        String result = validate.checkAndUpdate(mockScanner);
+
+        verify(mockScanner, times(1)).next();
+        assertEquals(sixDigitEmployeeNum, result);
 
     }
 
@@ -50,18 +44,23 @@ public class Mocks {
 
     public void testCheckAndUpdateWithInvalidInput() {
 
+        Validate validate = new Validate();
+        String sixDigitEmployeeNum = "112233";
+        String invalidEmployeeNum = "-990023";
+        String invalidInput = "pretamanger";
+
         // Store original standard input for later restoration
         InputStream originalIn = System.in;
 
         // call with invalid input
         try {
-
             // Programmatical simulation of user input
-            ByteArrayInputStream in = new ByteArrayInputStream(invalidEmployeeNum.getBytes());
+            ByteArrayInputStream in = new ByteArrayInputStream(sixDigitEmployeeNum.getBytes());
+            System.setIn(in);
 
             // redirect standard input to use simulated input
-            System.setIn(in);
-            String result = validate.checkAndUpdate(invalidEmployeeNum, new Scanner(System.in));
+            validate.checkAndUpdate(new Scanner(System.in));
+
 
         } finally {
             // Restore original standard input

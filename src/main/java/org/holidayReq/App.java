@@ -70,10 +70,9 @@ public class App {
         String userFullName = userInteractions.getUserInputStr();
 
         userInteractions.userPrompt("\nEnter your employee number:\n");
-        String employeeNum = userInteractions.getUserInputStr();
 
         // check and update employee number.
-        employeeNum = validate.checkAndUpdate(employeeNum, userInteractions.customScanner);
+        String employeeNum = validate.checkAndUpdate(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
         String startDate = userInteractions.getUserInputStr();

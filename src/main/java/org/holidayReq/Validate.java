@@ -14,7 +14,8 @@ public class Validate {
         return date;
     }
 
-    public String checkAndUpdate(String employeeNum, Scanner scanner) {
+    public String checkAndUpdate(Scanner scanner) {
+        String employeeNum = scanner.next();
         while (!validateFormat(employeeNum)) {
             userInteractions.userPrompt("\nInvalid entry. Employee numbers have six digits. Try again.\n");
             employeeNum = scanner.next();
