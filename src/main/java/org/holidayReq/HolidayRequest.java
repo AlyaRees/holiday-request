@@ -13,7 +13,7 @@ public class HolidayRequest {
         this.endDate = endDate;
     }
 
-    String fileContents() {
+    public String fileContents() {
         return "Name: " + this.fullName + " Employee Number: " + this.employeeNum + " Date: " + this.startDate + " " + this.endDate + " - PENDING APPROVAL\n";
     }
 }

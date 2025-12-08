@@ -1,11 +1,8 @@
 package org.holidayReq;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 class HandlesFile {
     protected String fileName = "HolidayReq.txt";
@@ -26,7 +23,6 @@ class UpdateFile extends ReadFromFile {
             fileWriter.close();
         } catch (IOException error) {
             App.statusReport("Error writing to file.");
-            error.printStackTrace();
         }
     }
 
@@ -52,7 +48,6 @@ class UpdateFile extends ReadFromFile {
             fileWriter.close();
         } catch (IOException error) {
             App.statusReport("Error writing to file.");
-            error.printStackTrace();
         }
     }
 

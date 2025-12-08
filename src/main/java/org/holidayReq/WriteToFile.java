@@ -12,7 +12,6 @@ public class WriteToFile extends HandlesFile {
             fileWriter.close();
         } catch (IOException error) {
             App.statusReport("Error writing to file.");
-            error.printStackTrace();
         }
     }
 }

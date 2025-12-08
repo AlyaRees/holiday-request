@@ -1,17 +1,18 @@
 package org.holidayReq;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class App {
 
     UserInteractions userInteractions = new UserInteractions();
     ReadFromFile reader = new ReadFromFile();
     WriteToFile writer = new WriteToFile();
-    Validate dateHandling = new Validate();
+    HandleValidation dateHandling = new HandleValidation();
     UpdateFile holidayInteraction = new UpdateFile();
     HandleLogin handleLogin = new HandleLogin();
-    Validate validate = new Validate();
+    HandleValidation validate = new HandleValidation();
+    HandleValidation.EmployeeNumber employeeNumber = validate.new EmployeeNumber();
+    HandleValidation.Date date = validate.new Date();
 
     // better to use error handling here rather than logic that handles invalid input
     // logic -> conditionals and loops
@@ -72,17 +73,14 @@ public class App {
         userInteractions.userPrompt("\nEnter your employee number:\n");
 
         // check and update employee number.
-        String employeeNum = validate.checkAndUpdate(userInteractions.customScanner);
+        String employeeNum = employeeNumber.askForInputAgain(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
-        String startDate = userInteractions.getUserInputStr();
 
-        startDate = dateHandling.checkAndUpdateDate("\n\nDate from:\n", startDate);
+        String startDate = date.askForInputAgain(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nDate to:\n");
-        String endDate = userInteractions.getUserInputStr();
-
-        endDate = dateHandling.checkAndUpdateDate("\nDate to:\n", endDate);
+        String endDate = date.askForInputAgain(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
         String areDatesCorrect = userInteractions.getUserInputStr();
@@ -126,7 +124,7 @@ public class App {
 
         // The option to approve or decline the request
         display("\n1 - Approve\n2 - Decline");
-        int selectedApproveOrDecline = userInteractions.getUserInputInt();
+        int selectedApproveOrDecline = validate.selection(userInteractions.getUserInputInt());
         // The selected request is updated and displayed
         holidayInteraction.updateHolidayStatus(requestIndex, selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");

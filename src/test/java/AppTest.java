@@ -1,58 +1,66 @@
 import org.holidayReq.*;
+import org.junit.Before;
 import org.junit.Test;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class AppTest {
 
     App app = new App();
-    Validate validate = new Validate();
+    Path pathOfFile = Paths.get("HolidayReq.txt");
+
+    // deletes the file before each test, should it already exist
+    @Before
+    public void deleteFile() {
+        try {
+            Files.deleteIfExists(pathOfFile);
+            // Catches an input/output exception should one occur. This indicates the failure or interruption of an input/output operation.
+        } catch (IOException e) {
+            app.statusReport("" + e);
+        }
+    }
 
     @Test
 
     public void testGetFileContent() {
 
-        App app = new App();
         ReadFromFile reader = new ReadFromFile();
         WriteToFile writer = new WriteToFile();
         HolidayRequest request = new HolidayRequest("Homer Simpson", "112233", "11/11/1111", "22/22/2222");
-        Path pathOfFile = Paths.get("HolidayReq.txt");
+        HolidayRequest request2 = new HolidayRequest("Jerry Smith", "556677", "11/11/1111", "22/22/2222");
 
-        // delete file before
-        try {
-            Files.deleteIfExists(pathOfFile);
-        } catch (IOException e) {
-            app.statusReport("" + e);
-        }
+        assertEquals(new ArrayList<String>(), reader.getFileContent());
 
+        // writes to a new file
         writer.save(request);
+        writer.save(request2);
 
+        // gets the information from the file and puts it in an ArrayList
         ArrayList<String> result = reader.getFileContent();
 
+        // checks the information added earlier is in the file
         assertEquals("Name: Homer Simpson Employee Number: 112233 Date: 11/11/1111 22/22/2222 - PENDING APPROVAL", result.get(0));
-
-        // delete file after
-        try {
-            Files.deleteIfExists(pathOfFile);
-        } catch (IOException e) {
-            app.statusReport("" + e);
-        }
+        assertEquals("[Name: Homer Simpson Employee Number: 112233 Date: 11/11/1111 22/22/2222 - PENDING APPROVAL," +
+                " Name: Jerry Smith Employee Number: 556677 Date: 11/11/1111 22/22/2222 - PENDING APPROVAL]", result.toString());
 
     }
 
     @Test
 
-    public void testIsValidDateFormat() {
+    public void testDateValidation() {
 
-        Validate dateHandle = new Validate();
+        HandleValidation dateHandle = new HandleValidation();
+        HandleValidation.Date date = dateHandle.new Date();
 
-        assertTrue(dateHandle.isValidFormat("04/11/2025"));
-        assertTrue(dateHandle.isValidFormat("27/12/2025"));
-        assertFalse(dateHandle.isValidFormat("hey"));
+        assertTrue(date.isValid("04/11/2025"));
+        assertTrue(date.isValid("27/12/2025"));
+        assertFalse(date.isValid("hey"));
 
     }
 
@@ -84,7 +92,10 @@ public class AppTest {
 
     @Test
 
-    public void testIsValidFormat() {
+    public void testEmployeeNumberValidation() {
+
+        HandleValidation validate = new HandleValidation();
+        HandleValidation.EmployeeNumber employeeNumber = validate.new EmployeeNumber();
 
         String sixDigitEmployeeNum = "112233";
         String invalidEmployeeNumShort = "12";
@@ -92,10 +103,10 @@ public class AppTest {
         String invalidEmployeeNum = "-990023";
         String invalidInput = "pretamanger";
 
-        assertTrue(validate.validateFormat(sixDigitEmployeeNum));
-        assertFalse(validate.validateFormat(invalidEmployeeNumShort));
-        assertFalse(validate.validateFormat(invalidEmployeeNumLong));
-        assertFalse(validate.validateFormat(invalidEmployeeNum));
-        assertFalse(validate.validateFormat(invalidInput));
+        assertTrue(employeeNumber.isValid(sixDigitEmployeeNum));
+        assertFalse(employeeNumber.isValid(invalidEmployeeNumShort));
+        assertFalse(employeeNumber.isValid(invalidEmployeeNumLong));
+        assertFalse(employeeNumber.isValid(invalidEmployeeNum));
+        assertFalse(employeeNumber.isValid(invalidInput));
     }
 }
