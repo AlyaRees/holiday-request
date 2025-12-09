@@ -6,17 +6,18 @@ public class HandleValidation {
 
     abstract class Validate {
 
-        protected String regex;
+        protected String pattern;
+        protected String errMessage;
 
         public boolean isValid(String input) {
-            return input.matches(this.regex);
+            return input.matches(this.pattern);
         }
 
         public String askForInputAgain(Scanner scanner) {
             scanner.useDelimiter("\n");
             String input = scanner.next();
             while (!isValid(input)) {
-                userInteractions.userPrompt("\nInvalid format. Try again.");
+                userInteractions.userPrompt(errMessage);
                 input = scanner.next();
             }
             return input;
@@ -25,13 +26,22 @@ public class HandleValidation {
 
     public class EmployeeNumber extends Validate {
         public EmployeeNumber() {
-            this.regex = "^[0-9]{6}$";
+            this.pattern = "^[0-9]{6}$";
+            this.errMessage = "\nInvalid entry. Employee numbers have six digits. Try again.\n";
         }
     }
 
     public class Date extends Validate {
         public Date() {
-            this.regex = "^\\d{2}\\/\\d{2}\\/\\d{4}$";
+            this.pattern = "^\\d{2}\\/\\d{2}\\/\\d{4}$";
+            this.errMessage = "\nInvalid format. Try again.";
+        }
+    }
+
+    public class Login extends Validate {
+        public Login() {
+            this.pattern = "password";
+            this.errMessage = "\nIncorrect password entered.\n";
         }
     }
     /*

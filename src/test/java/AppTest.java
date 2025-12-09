@@ -96,7 +96,6 @@ public class AppTest {
 
         HandleValidation validate = new HandleValidation();
         HandleValidation.EmployeeNumber employeeNumber = validate.new EmployeeNumber();
-
         String sixDigitEmployeeNum = "112233";
         String invalidEmployeeNumShort = "12";
         String invalidEmployeeNumLong = "0234560";
@@ -108,5 +107,19 @@ public class AppTest {
         assertFalse(employeeNumber.isValid(invalidEmployeeNumLong));
         assertFalse(employeeNumber.isValid(invalidEmployeeNum));
         assertFalse(employeeNumber.isValid(invalidInput));
+    }
+
+    @Test
+
+    public void testLoginIsValid() {
+
+        HandleValidation validate = new HandleValidation();
+        HandleValidation.Login login = validate.new Login();
+
+        String invalidInput = "pretamanger";
+        String validInput = "password";
+
+        assertTrue(login.isValid(validInput));
+        assertFalse(login.isValid(invalidInput));
     }
 }

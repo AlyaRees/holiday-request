@@ -9,10 +9,10 @@ public class App {
     WriteToFile writer = new WriteToFile();
     HandleValidation dateHandling = new HandleValidation();
     UpdateFile holidayInteraction = new UpdateFile();
-    HandleLogin handleLogin = new HandleLogin();
     HandleValidation validate = new HandleValidation();
     HandleValidation.EmployeeNumber employeeNumber = validate.new EmployeeNumber();
     HandleValidation.Date date = validate.new Date();
+    HandleValidation.Login login = validate.new Login();
 
     // better to use error handling here rather than logic that handles invalid input
     // logic -> conditionals and loops
@@ -109,7 +109,9 @@ public class App {
 
     private void optionThreeInteraction() {
 
-        handleLogin.adminLogin();
+        userInteractions.userPrompt("\nEnter admin password: \n");
+        login.askForInputAgain(userInteractions.customScanner);
+        statusReport("\nLogin successful.");
 
         display("\nSelect holiday to review:\n");
         // Gets the file content, puts it into an array list and adds number IDs

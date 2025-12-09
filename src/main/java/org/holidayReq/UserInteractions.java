@@ -2,8 +2,6 @@ package org.holidayReq;
 
 import java.util.Scanner;
 
-
-
 public class UserInteractions {
 
     public Scanner customScanner = new Scanner(System.in).useDelimiter("\n");
