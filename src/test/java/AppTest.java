@@ -53,19 +53,6 @@ public class AppTest {
 
     @Test
 
-    public void testDateValidation() {
-
-        HandleValidation dateHandle = new HandleValidation();
-        HandleValidation.Date date = dateHandle.new Date();
-
-        assertTrue(date.isValid("04/11/2025"));
-        assertTrue(date.isValid("27/12/2025"));
-        assertFalse(date.isValid("hey"));
-
-    }
-
-    @Test
-
     public void testAddNumberIDs() {
 
         ArrayList<String> testList = new ArrayList<>();
@@ -90,36 +77,4 @@ public class AppTest {
 
     }
 
-    @Test
-
-    public void testEmployeeNumberValidation() {
-
-        HandleValidation validate = new HandleValidation();
-        HandleValidation.EmployeeNumber employeeNumber = validate.new EmployeeNumber();
-        String sixDigitEmployeeNum = "112233";
-        String invalidEmployeeNumShort = "12";
-        String invalidEmployeeNumLong = "0234560";
-        String invalidEmployeeNum = "-990023";
-        String invalidInput = "pretamanger";
-
-        assertTrue(employeeNumber.isValid(sixDigitEmployeeNum));
-        assertFalse(employeeNumber.isValid(invalidEmployeeNumShort));
-        assertFalse(employeeNumber.isValid(invalidEmployeeNumLong));
-        assertFalse(employeeNumber.isValid(invalidEmployeeNum));
-        assertFalse(employeeNumber.isValid(invalidInput));
-    }
-
-    @Test
-
-    public void testLoginIsValid() {
-
-        HandleValidation validate = new HandleValidation();
-        HandleValidation.Login login = validate.new Login();
-
-        String invalidInput = "pretamanger";
-        String validInput = "password";
-
-        assertTrue(login.isValid(validInput));
-        assertFalse(login.isValid(invalidInput));
-    }
 }

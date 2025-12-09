@@ -7,12 +7,8 @@ public class App {
     UserInteractions userInteractions = new UserInteractions();
     ReadFromFile reader = new ReadFromFile();
     WriteToFile writer = new WriteToFile();
-    HandleValidation dateHandling = new HandleValidation();
     UpdateFile holidayInteraction = new UpdateFile();
-    HandleValidation validate = new HandleValidation();
-    HandleValidation.EmployeeNumber employeeNumber = validate.new EmployeeNumber();
-    HandleValidation.Date date = validate.new Date();
-    HandleValidation.Login login = validate.new Login();
+    Validate validate = new Validate();
 
     // better to use error handling here rather than logic that handles invalid input
     // logic -> conditionals and loops
@@ -21,10 +17,9 @@ public class App {
 
     private String selectHoliday(int index) {
         String selectedRequest = "";
-
         try {
             selectedRequest = getHolidayRequest(index);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (Exception e) {
             statusReport("Please select from the provided options. " + e);
             index = userInteractions.getUserInputInt();
             selectHoliday(index);
@@ -73,14 +68,14 @@ public class App {
         userInteractions.userPrompt("\nEnter your employee number:\n");
 
         // check and update employee number.
-        String employeeNum = employeeNumber.askForInputAgain(userInteractions.customScanner);
+        String employeeNum = validate.employeeNumber(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
 
-        String startDate = date.askForInputAgain(userInteractions.customScanner);
+        String startDate = validate.date(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nDate to:\n");
-        String endDate = date.askForInputAgain(userInteractions.customScanner);
+        String endDate = validate.date(userInteractions.customScanner);
 
         userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
         String areDatesCorrect = userInteractions.getUserInputStr();
@@ -110,7 +105,7 @@ public class App {
     private void optionThreeInteraction() {
 
         userInteractions.userPrompt("\nEnter admin password: \n");
-        login.askForInputAgain(userInteractions.customScanner);
+        validate.login(userInteractions.customScanner);
         statusReport("\nLogin successful.");
 
         display("\nSelect holiday to review:\n");
@@ -119,16 +114,15 @@ public class App {
         displayElements(addNumberIDs(fileContent));
 
         // User selects a holiday request, and it is then displayed.
-        int requestIndex = userInteractions.getUserInputInt();
-        String selectedRequest = selectHoliday(requestIndex);
+        String selectedRequest = selectHoliday(userInteractions.getUserInputInt());
         display("\nYou selected:\n");
         display(selectedRequest);
 
         // The option to approve or decline the request
         display("\n1 - Approve\n2 - Decline");
-        int selectedApproveOrDecline = validate.selection(userInteractions.getUserInputInt());
+        int selectedApproveOrDecline = validate.selection(userInteractions.customScanner);
         // The selected request is updated and displayed
-        holidayInteraction.updateHolidayStatus(requestIndex, selectedApproveOrDecline);
+        holidayInteraction.updateHolidayStatus(userInteractions.getUserInputInt(), selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");
         display(getHolidayRequest(selectedApproveOrDecline));
     }
