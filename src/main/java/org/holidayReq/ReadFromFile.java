@@ -5,14 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ReadFromFile extends HandlesFile {
+public class ReadFromFile {
 
     ArrayList<String> dates = new ArrayList<>();
     Scanner fileReader = null;
 
     public ArrayList<String> getFileContent() {
         try {
-            File fileObject = new File(fileName);
+            File fileObject = new File("HolidayReq.txt");
             // The scanner reads from the file object
             fileReader = new Scanner(fileObject);
             while (fileReader.hasNextLine()) {
@@ -28,5 +28,9 @@ public class ReadFromFile extends HandlesFile {
             }
         }
         return dates;
+    }
+
+    public String getHolidayRequest(int index) {
+        return getFileContent().get(index - 1);
     }
 }

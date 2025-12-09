@@ -7,7 +7,7 @@ public class App {
     UserInteractions userInteractions = new UserInteractions();
     ReadFromFile reader = new ReadFromFile();
     WriteToFile writer = new WriteToFile();
-    UpdateFile holidayInteraction = new UpdateFile();
+    UpdateFile updateFile = new UpdateFile();
     Validate validate = new Validate();
 
     // better to use error handling here rather than logic that handles invalid input
@@ -18,20 +18,13 @@ public class App {
     private String selectHoliday(int index) {
         String selectedRequest = "";
         try {
-            selectedRequest = getHolidayRequest(index);
+            selectedRequest = reader.getHolidayRequest(index);
         } catch (Exception e) {
             statusReport("Please select from the provided options. " + e);
             index = userInteractions.getUserInputInt();
             selectHoliday(index);
         }
         return selectedRequest;
-    }
-
-    static String getHolidayRequest(int index) {
-        index = index - 1;
-        ReadFromFile reader = new ReadFromFile();
-        String selectedDate = reader.getFileContent().get(index);
-        return selectedDate;
     }
 
     public ArrayList<String> addNumberIDs(ArrayList<String> list) {
@@ -93,8 +86,8 @@ public class App {
 
         if (areDatesCorrect.equalsIgnoreCase("Y")) {
             HolidayRequest request = new HolidayRequest(userFullName, employeeNum, startDate, endDate);
-            writer.save(request);
-            holidayInteraction.reformatFile();
+            writer.save(request.fileContents());
+            updateFile.reformatFile();
             statusReport("Details saved.");
 
         } else {
@@ -114,7 +107,8 @@ public class App {
         displayElements(addNumberIDs(fileContent));
 
         // User selects a holiday request, and it is then displayed.
-        String selectedRequest = selectHoliday(userInteractions.getUserInputInt());
+        int requestIndex = userInteractions.getUserInputInt();
+        String selectedRequest = selectHoliday(requestIndex);
         display("\nYou selected:\n");
         display(selectedRequest);
 
@@ -122,9 +116,9 @@ public class App {
         display("\n1 - Approve\n2 - Decline");
         int selectedApproveOrDecline = validate.selection(userInteractions.customScanner);
         // The selected request is updated and displayed
-        holidayInteraction.updateHolidayStatus(userInteractions.getUserInputInt(), selectedApproveOrDecline);
+        updateFile.updateHolidayStatus(selectedApproveOrDecline, requestIndex);
         display("\nThe following request has been updated:\n");
-        display(getHolidayRequest(selectedApproveOrDecline));
+        display(reader.getHolidayRequest(selectedApproveOrDecline));
     }
 
     public void run() {

@@ -38,8 +38,8 @@ public class AppTest {
         assertEquals(new ArrayList<String>(), reader.getFileContent());
 
         // writes to a new file
-        writer.save(request);
-        writer.save(request2);
+        writer.save(request.fileContents());
+        writer.save(request2.fileContents());
 
         // gets the information from the file and puts it in an ArrayList
         ArrayList<String> result = reader.getFileContent();

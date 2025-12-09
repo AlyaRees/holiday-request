@@ -3,12 +3,12 @@ package org.holidayReq;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class WriteToFile extends HandlesFile {
+public class WriteToFile {
 
-    public void save(HolidayRequest request) {
+    public void save(String content) {
         try {
-            FileWriter fileWriter = new FileWriter(fileName, true);
-            fileWriter.write(request.fileContents());
+            FileWriter fileWriter = new FileWriter("HolidayReq.txt", true);
+            fileWriter.write(content);
             fileWriter.close();
         } catch (IOException error) {
             App.statusReport("Error writing to file.");

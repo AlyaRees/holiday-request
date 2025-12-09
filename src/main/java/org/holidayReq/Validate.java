@@ -16,7 +16,7 @@ public class Validate {
         scanner.useDelimiter("\n");
         String input = scanner.next();
         while (!isValid(input)) {
-            userInteractions.userPrompt(errMessage);
+            userInteractions.userPrompt(this.errMessage);
             input = scanner.next();
         }
         return input;
@@ -54,14 +54,13 @@ public class Validate {
 
      */
 
-
     public int selection(Scanner scanner) {
-        int userInput = scanner.nextInt();
-        while (userInput != 1 || userInput != 2) {
-            userInteractions.userPrompt("\nSelect from the provided options only.\n");
-            userInput = scanner.nextInt();
-        }
-        return userInput;
+       int userInput = scanner.nextInt();
+       while (!(userInput == 1 || userInput == 2)) {
+           userInteractions.userPrompt("\nPlease select a valid option.");
+           userInput = scanner.nextInt();
+       }
+       return userInput;
     }
 }
 /*
