@@ -1,15 +1,23 @@
 package org.holidayReq;
 
-public class Lateness extends Request {
+public class Lateness extends Absence {
 
-    protected float hoursLate;
+    protected double hoursLate;
+    protected String reason;
+    protected String date;
 
-    public Lateness(String fullName, String employeeNum, String startDate, String endDate, float hoursLate) {
-        super(fullName, employeeNum, startDate, endDate);
+    public Lateness(String fullName, String employeeNum, String date, double hoursLate, String reason) {
+        super(fullName, employeeNum);
+        this.reason = reason;
         this.hoursLate = hoursLate;
+        this.date = date;
     }
 
     public String requestType() {
         return "Lateness - ";
+    }
+
+    public String getAdditionalInfo() {
+        return this.date + " Hours: " + this.hoursLate + " Reason: " + this.reason;
     }
 }

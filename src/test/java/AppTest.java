@@ -26,19 +26,39 @@ public class AppTest {
         }
     }
 
-    @After
-    public void deleteFileAfter() {
-
-        Path pathOfFile = Paths.get("HolidayReq.txt");
-        try {
-            Files.deleteIfExists(pathOfFile);
-            // Catches an input/output exception should one occur. This indicates the failure or interruption of an input/output operation.
-        } catch (IOException e) {
-            app.statusReport("" + e);
-        }
-    }
+//    @After
+//    public void deleteFileAfter() {
+//
+//        Path pathOfFile = Paths.get("HolidayReq.txt");
+//        try {
+//            Files.deleteIfExists(pathOfFile);
+//            // Catches an input/output exception should one occur. This indicates the failure or interruption of an input/output operation.
+//        } catch (IOException e) {
+//            app.statusReport("" + e);
+//        }
+//    }
 
     static App app = new App();
+
+    @Test
+
+    public void testBookSickNess() {
+
+    }
+
+    @Test
+
+    public void testLatenessRequest() {
+
+        Absence latenessRequest = new Lateness("Homer Simpson", "112233", "11/11/1111", 2, "doctors appointment");
+        WriteToFile writer = new WriteToFile();
+        ReadFromFile reader = new ReadFromFile();
+
+        writer.save(latenessRequest.fileContents());
+
+        assertEquals("Request: Lateness - Name: Homer Simpson Employee Number: 112233 Date: 11/11/1111 Hours: 2.0 Reason: doctors appointment - PENDING APPROVAL", reader.getFileContent().get(0));
+        assertEquals(1, reader.getFileContent().size());
+    }
 
     @Test
 

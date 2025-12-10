@@ -43,12 +43,21 @@ public class Validate {
      */
 
     public int selection(Scanner scanner) {
-       int userInput = scanner.nextInt();
-       while (!(userInput == 1 || userInput == 2)) {
-           userInteractions.userPrompt("\nPlease select a valid option.");
-           userInput = scanner.nextInt();
-       }
-       return userInput;
+        int userInput = scanner.nextInt();
+        while (!(userInput == 1 || userInput == 2)) {
+            userInteractions.userPrompt("\nPlease select a valid option.");
+            userInput = scanner.nextInt();
+        }
+        return userInput;
+    }
+
+    public double hours(Scanner scanner) {
+        double userInput = scanner.nextDouble();
+        while (!(userInput > 0.0) && !(userInput <= 7.5)) {
+            userInteractions.userPrompt("\nPlease enter a valid duration.\n");
+            userInput = scanner.nextDouble();
+        }
+        return userInput;
     }
 }
 /*

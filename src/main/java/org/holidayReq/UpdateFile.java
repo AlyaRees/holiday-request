@@ -23,7 +23,7 @@ public class UpdateFile extends ReadFromFile {
         ArrayList<String> formattedLines = new ArrayList<>();
         // read from file
         getFileContent()
-                .forEach(request -> formattedLines.add(request.replaceAll("\\BName", "\nName")));
+                .forEach(request -> formattedLines.add(request.replaceAll("\\BRequest", "\nRequest")));
         try {
             FileWriter fileWriter = new FileWriter("HolidayReq.txt", false);
             fileWriter.write(fileContentToString(formattedLines));
@@ -35,14 +35,14 @@ public class UpdateFile extends ReadFromFile {
 
     public void holidayStatus(int selectedHolidayOption, int approveOrDeclineOption) {
         ArrayList<String> fileContent = getFileContent();
-        String selectedRequest = fileContent.get(selectedHolidayOption).trim();
+        String selectedRequest = fileContent.get(selectedHolidayOption);
         // must use replaceAll when using regex to match patterns
         String updatedRequest = selectedRequest.replaceAll("-\\s\\w+(?:\\s\\w+)?$", approveOrDecline(approveOrDeclineOption)).trim();
         String fileContentString = fileContentToString(fileContent);
         String updatedFileContent = fileContentString.replace(selectedRequest, updatedRequest);
         try {
             FileWriter fileWriter = new FileWriter("HolidayReq.txt", false);
-            fileWriter.write(updatedFileContent);
+            fileWriter.write(updatedFileContent.trim());
             fileWriter.close();
         } catch (IOException error) {
             App.statusReport("Error writing to file.");
@@ -50,7 +50,6 @@ public class UpdateFile extends ReadFromFile {
     }
 
     String fileContentToString(ArrayList<String> fileContent) {
-        return fileContent.stream()
-                .reduce("", (curr, next) -> curr.trim().concat("\n" + next.trim()));
+        return String.join("\n", fileContent);
     }
 }
