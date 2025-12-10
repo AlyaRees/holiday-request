@@ -15,12 +15,16 @@ public class App {
     // I used -> error handling and recursion
     // logic -> if index != 0 OR index > number of entries OR index < number of entries, handle error and repeat process. What if user enters a minus number? Try-catch handles this. This would be harder to achieve with logic.
 
+    public int getCorrectIndex(int userInputInt) {
+        return userInputInt - 1;
+    }
+
     private String selectHoliday(int index) {
         String selectedRequest = "";
         try {
-            selectedRequest = reader.getHolidayRequest(index);
+            selectedRequest = reader.getFileContent().get(index);
         } catch (Exception e) {
-            statusReport("Please select from the provided options. " + e);
+            statusReport("Please select from the provided options.");
             index = userInteractions.getUserInputInt();
             selectHoliday(index);
         }
@@ -107,7 +111,7 @@ public class App {
         displayElements(addNumberIDs(fileContent));
 
         // User selects a holiday request, and it is then displayed.
-        int selectedHolidayOption = userInteractions.getUserInputInt();
+        int selectedHolidayOption = getCorrectIndex(userInteractions.getUserInputInt());
         String selectedRequest = selectHoliday(selectedHolidayOption);
         display("\nYou selected:\n");
         display(selectedRequest);
@@ -118,8 +122,7 @@ public class App {
         // The selected request is updated and displayed
         updateFile.holidayStatus(selectedHolidayOption, selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");
-        display("selectedHolidayOption: " + selectedHolidayOption);
-        display(reader.getHolidayRequest(selectedHolidayOption));
+        display(reader.getFileContent().get(selectedHolidayOption));
     }
 
     public void run() {

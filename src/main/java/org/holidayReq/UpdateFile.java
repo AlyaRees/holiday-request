@@ -36,14 +36,15 @@ public class UpdateFile extends ReadFromFile {
     }
 
     public void holidayStatus(int selectedHolidayOption, int approveOrDeclineOption) {
-        String selectedRequest = getHolidayRequest(selectedHolidayOption);
-        App.display("selectedRequest: " + selectedRequest);
-        String updatedRequest = selectedRequest.replaceAll("-\\s\\w+(?:\\s\\w+)?$", approveOrDecline(approveOrDeclineOption));
-        String updatedContent = fileContentToString(getFileContent()).replaceAll(selectedRequest, updatedRequest);
-        App.display("updatedRequest: " + updatedRequest);
+        ArrayList<String> fileContent = getFileContent();
+        String selectedRequest = fileContent.get(selectedHolidayOption).trim();
+        // must use replaceAll when using regex to match patterns
+        String updatedRequest = selectedRequest.replaceAll("-\\s\\w+(?:\\s\\w+)?$", approveOrDecline(approveOrDeclineOption)).trim();
+        String fileContentString = fileContentToString(fileContent);
+        String updatedFileContent = fileContentString.replace(selectedRequest, updatedRequest);
         try {
             FileWriter fileWriter = new FileWriter("HolidayReq.txt", false);
-            fileWriter.write(updatedContent);
+            fileWriter.write(updatedFileContent);
             fileWriter.close();
         } catch (IOException error) {
             App.statusReport("Error writing to file.");
@@ -52,6 +53,6 @@ public class UpdateFile extends ReadFromFile {
 
     String fileContentToString(ArrayList<String> fileContent) {
         return fileContent.stream()
-                .collect(Collectors.joining("\n"));
+                .reduce("", (curr, next) -> curr.trim().concat("\n" + next.trim()));
     }
 }

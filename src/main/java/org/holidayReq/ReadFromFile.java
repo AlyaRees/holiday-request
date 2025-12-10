@@ -1,37 +1,29 @@
 package org.holidayReq;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ReadFromFile {
 
-    ArrayList<String> dates = new ArrayList<>();
-    Scanner fileReader = null;
-
     public ArrayList<String> getFileContent() {
-        try {
-            File fileObject = new File("HolidayReq.txt");
-            // The scanner reads from the file object
-            fileReader = new Scanner(fileObject);
-            while (fileReader.hasNextLine()) {
-                dates.add(fileReader.nextLine().trim());
-            }
-            // The catch block is run if the file doesn't exist or is empty
-        } catch (FileNotFoundException e) {
-            App.statusReport("No holiday has been submitted.\n" + e);
-            // close the file reader if it's been used.
-        } finally {
-            if (fileReader != null) {
-                fileReader.close();
+
+        ArrayList<String> dates = new ArrayList<>();
+
+        try (BufferedReader bufferReader = new BufferedReader(
+                new FileReader("HolidayReq.txt")
+        )) {
+            while (bufferReader.ready()) {
+                dates.add(bufferReader.readLine());
             }
         }
+        // The catch block is run if the file doesn't exist or is empty
+        catch (IOException e) {
+            App.statusReport("No holiday has been submitted.\n" + e);
+        }
         return dates;
-    }
-
-    public String getHolidayRequest(int index) {
-        index = index - 1;
-        return getFileContent().get(index);
     }
 }
