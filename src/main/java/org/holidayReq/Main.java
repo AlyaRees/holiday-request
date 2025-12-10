@@ -28,6 +28,7 @@ public class Main {
 // To reduce duplication, I created my own custom scanner which I could use everywhere 'customScanner'
 // This ensured correct behaviour (no scanner input will be skipped over).
 // Solved problem - there is no longer a collision between requests with the same dates. Requests are no longer retrieved by their dates and are instead got by their index (the user can see and select the one they want to edit!)
+// Major confusing issue with writing to the file. Because scanner was used to read the file and can read from previous input, this was causing issues when reading from a file. There were moments where a file had only 2 entries but the tests were showing 5! I decided to switch to using a bufferReader rather than scanner to avoid this issue.
 
 // TODO
 
