@@ -41,3 +41,5 @@ public class UserDetails {
         return validate.hours(userInteractions.customScanner);
     }
 }
+
+// move the data out of here (the message strings) to comply with encapsulation.
