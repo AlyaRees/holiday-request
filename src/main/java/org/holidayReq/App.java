@@ -1,24 +1,16 @@
 package org.holidayReq;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App {
 
-    UserInteractions userInteractions = new UserInteractions();
+    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
     ReadFromFile reader = new ReadFromFile();
     WriteToFile writer = new WriteToFile();
     UpdateFile updateFile = new UpdateFile();
-    Validate validate = new Validate();
-    UserDetails user = new UserDetails();
-
-    // better to use error handling here rather than logic that handles invalid input
-    // logic -> conditionals and loops
-    // I used -> error handling and recursion
-    // logic -> if index != 0 OR index > number of entries OR index < number of entries, handle error and repeat process. What if user enters a minus number? Try-catch handles this. This would be harder to achieve with logic.
-
-    public int getCorrectIndex(int userInputInt) {
-        return userInputInt - 1;
-    }
+    CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
+    GetUserDetails user = new GetUserDetails();
 
     private String selectHoliday(int index) {
         String selectedRequest = "";
@@ -30,6 +22,27 @@ public class App {
             selectHoliday(index);
         }
         return selectedRequest;
+    }
+
+    public int getCorrectIndex(int userInputInt) {
+        return userInputInt - 1;
+    }
+
+    private void getUserSelection() {
+        int selectedOption = Integer.parseInt(userInteractions.getUserInputStr());
+
+        switch (selectedOption) {
+            case 1 -> selectRequestToBook();
+            case 2 -> {
+                statusReport("\nHoliday approval status:\n");
+                displayElements(reader.getFileContent());
+            }
+            case 3 -> adminReviewRequests();
+            default -> {
+                statusReport("\nInvalid. Try again.\n");
+                getUserSelection();
+            }
+        }
     }
 
     public ArrayList<String> addNumberIDs(ArrayList<String> list) {
@@ -59,9 +72,7 @@ public class App {
 
     private void selectRequestToBook() {
         userInteractions.userPrompt("\nWhat would you like to book?\n");
-        display("1 - Holiday\n" +
-                "2 - Sickness\n" +
-                "3 - Lateness to work\n");
+        display("1 - Holiday\n" + "2 - Sickness\n" + "3 - Lateness to work\n");
         int bookingSelectedOption = userInteractions.getUserInputInt();
         switch (bookingSelectedOption) {
             case 1 -> bookHoliday();
@@ -74,13 +85,18 @@ public class App {
         }
     }
 
+    private static String getContent(Absence holidayRequest) {
+        return holidayRequest.fileContents();
+    }
+
     private void bookHoliday() {
 
         String userFullName = user.getUserName();
         String employeeNum = user.getEmployeeNumber();
         String startDate = user.getStartDate();
         String endDate = user.getEndDate();
-        String areDatesCorrect = user.checkDates();
+
+        String areDatesCorrect = user.areEnteredDatesCorrect();
 
         while (areDatesCorrect.equalsIgnoreCase("N")) {
             userInteractions.userPrompt("\nEnter the date of absence you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
@@ -104,18 +120,13 @@ public class App {
         }
     }
 
-    private static String getContent(Absence holidayRequest) {
-        return holidayRequest.fileContents();
-    }
-
     private void bookLateness() {
 
         String userFullName = user.getUserName();
         String employeeNum = user.getEmployeeNumber();
-        userInteractions.userPrompt("\nEnter the date you're late on:\n(Use the format DD/M/YYYY)\n");
-        String date = userInteractions.getUserInputStr();
-        userInteractions.userPrompt("\nDate: " + date + " correct?\n");
-        String yesOrNo = userInteractions.getUserInputStr();
+        String date = user.getDate();
+
+        String yesOrNo = user.isDateCorrect();
 
         while (yesOrNo.equalsIgnoreCase("N")) {
             userInteractions.userPrompt("\nEnter the date you're late on:\n(Use the format DD/M/YYYY)\n");
@@ -140,7 +151,7 @@ public class App {
 
         while (isEntryCorrect.equalsIgnoreCase("N")) {
             userInteractions.userPrompt("\nHow many working hours will you be absent?\n(0.5 for 30 minutes, 1 for 1 hour)\n");
-            hours = validate.hours(userInteractions.customScanner);
+            hours = checkAndUpdate.hours(userInteractions.customScanner);
 
             userInteractions.userPrompt("\n" + hours + "hours, correct?\n");
 
@@ -168,7 +179,7 @@ public class App {
         userInteractions.userPrompt("\nEnter your reason for absence: \n");
         String reason = userInteractions.getUserInputStr();
 
-        String areDatesCorrect = user.checkDates();
+        String areDatesCorrect = user.areEnteredDatesCorrect();
 
         while (areDatesCorrect.equalsIgnoreCase("N")) {
             userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/M/YYYY)\n\nDate from:\n");
@@ -192,10 +203,10 @@ public class App {
         }
     }
 
-    private void optionThreeInteraction() {
+    private void adminReviewRequests() {
 
         userInteractions.userPrompt("\nEnter admin password: \n");
-        validate.login(userInteractions.customScanner);
+        checkAndUpdate.login(userInteractions.customScanner);
         statusReport("\nLogin successful.");
 
         display("\nSelect holiday to review:\n");
@@ -204,6 +215,8 @@ public class App {
         displayElements(addNumberIDs(fileContent));
 
         // User selects a holiday request, and it is then displayed.
+        // makes sure the correct number is used for indexing into the array of absence requests
+        // ie the first request is numbered '1', which corresponds to the first element in the array, indexed at 0
         int selectedHolidayOption = getCorrectIndex(userInteractions.getUserInputInt());
         String selectedRequest = selectHoliday(selectedHolidayOption);
         display("\nYou selected:\n");
@@ -211,7 +224,7 @@ public class App {
 
         // The option to approve or decline the request
         display("\n1 - Approve\n2 - Decline");
-        int selectedApproveOrDecline = validate.selection(userInteractions.customScanner);
+        int selectedApproveOrDecline = checkAndUpdate.selection(userInteractions.customScanner);
         // The selected request is updated and displayed
         updateFile.holidayStatus(selectedHolidayOption, selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");
@@ -220,29 +233,23 @@ public class App {
 
     public void run() {
 
-        userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n " +
-                "2 - Check holiday approval status\n " +
-                "3 - Approve holiday (admin only)\n");
+        userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n " + "2 - Check holiday approval status\n " + "3 - Approve holiday (admin only)\n");
 
-        // The switch statement tightens the constraints for user input (the choice should only be 1, 2 or 3)
-
-        switch (userInteractions.getUserInputInt()) {
-            case 1 -> selectRequestToBook();
-            case 2 -> {
-                statusReport("\nHoliday approval status:\n");
-                displayElements(reader.getFileContent());
+        boolean predicate = true;
+        do {
+            try {
+                getUserSelection();
+                predicate = false;
+            } catch (Exception e) {
+                statusReport("\nInvalid. Try again.\n");
             }
-            case 3 -> optionThreeInteraction();
-            default -> {
-                statusReport("\nPlease select a valid option.");
-                run();
-            }
-        }
+        } while (predicate);
         userInteractions.closeScanner();
-
-        // userInteractions.customScanner.next(); -> should throw an error because we're trying to use the scanner after closing it!
     }
 }
+
+// userInteractions.customScanner.next(); -> should throw an error because we're trying to use the scanner after closing it!
+
 
 // first issue -> scanner doesn't work the way I thought it did...
 // keeps printing the selected number when the code has finished executing.

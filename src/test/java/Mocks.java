@@ -13,24 +13,11 @@ public class Mocks {
 
     @Test
 
-    public void testReviewSelectionValidInput() {
-        Validate validate = new Validate();
-        Scanner mockScanner = mock(Scanner.class);
-        int validInputOne = 1;
-        when(mockScanner.nextInt()).thenReturn(validInputOne);
+    public void testReviewSelection() {
 
-        int result = validate.selection(mockScanner);
+        // selection should be limited to a 1 - approve or 2 - decline
 
-        verify(mockScanner, times(1)).nextInt();
-
-        assertEquals(validInputOne, result);
-
-    }
-
-    @Test
-
-    public void testReviewSelectionInvalidInput() {
-        Validate validate = new Validate();
+        CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
         Scanner mockScanner = mock(Scanner.class);
         int invalidInput = 12;
         int validInput = 1;
@@ -39,7 +26,7 @@ public class Mocks {
                 .thenReturn(invalidInput)
                 .thenReturn(validInput);
 
-        int result2 = validate.selection(mockScanner);
+        int result2 = checkAndUpdate.selection(mockScanner);
 
         verify(mockScanner, times(2)).nextInt();
         assertEquals(validInput, result2);
@@ -47,16 +34,16 @@ public class Mocks {
 
     @Test
 
-    public void testCheckAndUpdateWithValidInput() {
+    public void testCheckAndUpdateEmployeeNumberValidInput() {
 
         // Employee numbers must be six digits long.
 
-        Validate validate = new Validate();
+        CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
         String sixDigitEmployeeNum = "112233";
         Scanner mockScanner = mock(Scanner.class);
         when(mockScanner.next()).thenReturn(sixDigitEmployeeNum);
 
-        String result = validate.employeeNumber(mockScanner);
+        String result = checkAndUpdate.employeeNumber(mockScanner);
 
         verify(mockScanner, times(1)).next();
         assertEquals(sixDigitEmployeeNum, result);
@@ -65,9 +52,9 @@ public class Mocks {
 
     @Test
 
-    public void testCheckAndUpdateWithInvalidInput() {
+    public void testCheckAndUpdateEmployeeNumberInvalidInput() {
 
-        Validate validate = new Validate();
+        CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
         String sixDigitEmployeeNum = "112233";
         String invalidEmployeeNum = "-990023";
         Scanner mockScanner = mock(Scanner.class);
@@ -76,10 +63,11 @@ public class Mocks {
                 .thenReturn(invalidEmployeeNum)
                 .thenReturn(sixDigitEmployeeNum);
 
-        String result = validate.employeeNumber(mockScanner);
+        String result = checkAndUpdate.employeeNumber(mockScanner);
 
         verify(mockScanner, times(2)).next();
         assertEquals(sixDigitEmployeeNum, result);
 
     }
+
 }

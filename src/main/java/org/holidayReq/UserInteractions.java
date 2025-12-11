@@ -4,7 +4,11 @@ import java.util.Scanner;
 
 public class UserInteractions {
 
-    public Scanner customScanner = new Scanner(System.in).useDelimiter("\n");
+    public Scanner customScanner;
+
+    public UserInteractions(Scanner customScanner) {
+        this.customScanner = customScanner;
+    }
 
     void closeScanner() {
         customScanner.close();

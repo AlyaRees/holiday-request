@@ -2,15 +2,16 @@ package org.holidayReq;
 
 import java.util.Scanner;
 
-public class Validate {
+import static org.holidayReq.App.statusReport;
 
-    UserInteractions userInteractions = new UserInteractions();
+public class CheckAndUpdate {
 
-    public String askForInputAgain(Scanner scanner, String pattern, String errMessage) {
-        scanner.useDelimiter("\n");
+    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
+
+    public String askForInputAgain(Scanner scanner, String pattern, String message) {
         String input = scanner.next();
         while (!input.matches(pattern)) {
-            userInteractions.userPrompt(errMessage);
+            userInteractions.userPrompt(message);
             input = scanner.next();
         }
         return input;
@@ -40,7 +41,16 @@ public class Validate {
 - the thing the variable must conform to (regex or type)
 - if th inputted thing is valid then return it
 
+    public String askForInputAgain(Scanner scanner, String pattern, String message) {
+        String input = scanner.next();
+        while (!input.matches(pattern)) {
+            userInteractions.userPrompt(message);
+            input = scanner.next();
+        }
+        return input;
+    }
      */
+
 
     public int selection(Scanner scanner) {
         int userInput = scanner.nextInt();

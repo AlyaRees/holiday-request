@@ -1,5 +1,4 @@
 import org.holidayReq.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
@@ -26,25 +26,7 @@ public class AppTest {
         }
     }
 
-//    @After
-//    public void deleteFileAfter() {
-//
-//        Path pathOfFile = Paths.get("HolidayReq.txt");
-//        try {
-//            Files.deleteIfExists(pathOfFile);
-//            // Catches an input/output exception should one occur. This indicates the failure or interruption of an input/output operation.
-//        } catch (IOException e) {
-//            app.statusReport("" + e);
-//        }
-//    }
-
     static App app = new App();
-
-    @Test
-
-    public void testBookSickNess() {
-
-    }
 
     @Test
 
