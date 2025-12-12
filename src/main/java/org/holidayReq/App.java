@@ -5,12 +5,14 @@ import java.util.Scanner;
 
 public class App {
 
+    // EVERYTHING'S working at this point!
+
     UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
     ReadFromFile reader = new ReadFromFile();
     WriteToFile writer = new WriteToFile();
     UpdateFile updateFile = new UpdateFile();
     CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
-    GetUserDetails user = new GetUserDetails();
+    UserDetails user = new UserDetails();
 
     private static String getContent(Absence holidayRequest) {
         return holidayRequest.fileContents();
@@ -54,11 +56,12 @@ public class App {
     }
 
     static void displayElements(ArrayList<String> list) {
+        // logs each element in an array to the console
         list.forEach(item -> display(item));
     }
 
     private void selectRequestToBook() {
-        userInteractions.userPrompt("\nWhat would you like to book?\n");
+        userInteractions.userPrompt("\nWhat absence would you like to request?\n");
         display("1 - Holiday\n" + "2 - Sickness\n" + "3 - Lateness to work\n");
         int bookingSelectedOption = Integer.parseInt(checkAndUpdate.selection(userInteractions.customScanner));
         switch (bookingSelectedOption) {
@@ -70,26 +73,21 @@ public class App {
 
     private void bookHoliday() {
 
-        String userFullName = user.getUserName();
-        String employeeNum = user.getEmployeeNumber();
-        String startDate = user.getStartDate();
-        String endDate = user.getEndDate();
+        user.setEmployeeName();
+        user.setEmployeeNumber();
+        user.setStartDate();
+        user.setEndDate();
 
         String areDatesCorrect = user.areEnteredDatesCorrect();
 
         while (areDatesCorrect.equalsIgnoreCase("N")) {
-            userInteractions.userPrompt("\nEnter the date of absence you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
-            startDate = userInteractions.getUserInputStr();
-
-            userInteractions.userPrompt("\nDate to:\n");
-            endDate = userInteractions.getUserInputStr();
-            userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
-
-            areDatesCorrect = userInteractions.getUserInputStr();
+            user.setStartDate();
+            user.setEndDate();
+            areDatesCorrect = user.areEnteredDatesCorrect();
         }
 
         if (areDatesCorrect.equalsIgnoreCase("Y")) {
-            Absence holidayRequest = new Holiday(userFullName, employeeNum, startDate, endDate);
+            Absence holidayRequest = new Holiday(user.getEmployeeName(), user.getEmployeeNumber(), user.getStartDate(), user.getEndDate());
             writer.save(getContent(holidayRequest));
             updateFile.reformatFile();
             statusReport("Details saved.");
@@ -101,8 +99,8 @@ public class App {
 
     private void bookLateness() {
 
-        String userFullName = user.getUserName();
-        String employeeNum = user.getEmployeeNumber();
+        user.setEmployeeName();
+        user.setEmployeeNumber();
         String date = user.getDate();
 
         String yesOrNo = user.isDateCorrect();
@@ -114,10 +112,6 @@ public class App {
             userInteractions.userPrompt("\nDate: " + date + " Correct? (Y/N)\n");
 
             yesOrNo = userInteractions.getUserInputStr();
-        }
-
-        if (yesOrNo.equalsIgnoreCase("N")) {
-            statusReport("Invalid input.");
         }
 
         userInteractions.userPrompt("\nEnter your reason for absence: \n");
@@ -138,7 +132,7 @@ public class App {
         }
 
         if (isEntryCorrect.equalsIgnoreCase("Y")) {
-            Absence lateness = new Lateness(userFullName, employeeNum, date, hours, reason);
+            Absence lateness = new Lateness(user.getEmployeeName(), user.getEmployeeNumber(), date, hours, reason);
             writer.save(lateness.fileContents());
             updateFile.reformatFile();
             statusReport("Details saved.");
@@ -150,10 +144,10 @@ public class App {
 
     private void bookSickness() {
 
-        String userFullName = user.getUserName();
-        String employeeNum = user.getEmployeeNumber();
-        String startDate = user.getStartDate();
-        String endDate = user.getEndDate();
+        user.setEmployeeName();
+        user.setEmployeeNumber();
+        user.setStartDate();
+        user.setEndDate();
 
         userInteractions.userPrompt("\nEnter your reason for absence: \n");
         String reason = userInteractions.getUserInputStr();
@@ -161,18 +155,13 @@ public class App {
         String areDatesCorrect = user.areEnteredDatesCorrect();
 
         while (areDatesCorrect.equalsIgnoreCase("N")) {
-            userInteractions.userPrompt("\nEnter holiday you want to book:\n(Use the format DD/M/YYYY)\n\nDate from:\n");
-            startDate = userInteractions.getUserInputStr();
-
-            userInteractions.userPrompt("\nDate to:\n");
-            endDate = userInteractions.getUserInputStr();
-            userInteractions.userPrompt("\nYou want to book from: " + startDate + " to " + endDate + "\nCorrect? (Y/N)\n");
-
-            areDatesCorrect = userInteractions.getUserInputStr();
+            user.setStartDate();
+            user.setEndDate();
+            areDatesCorrect = user.areEnteredDatesCorrect();
         }
 
         if (areDatesCorrect.equalsIgnoreCase("Y")) {
-            Absence sickLeaveRequest = new SickLeave(userFullName, employeeNum, startDate, endDate, reason);
+            Absence sickLeaveRequest = new SickLeave(user.getEmployeeName(), user.getEmployeeNumber(), user.startDate, user.endDate, reason);
             writer.save(sickLeaveRequest.fileContents().trim());
             updateFile.reformatFile();
             statusReport("Details saved.");
@@ -212,7 +201,7 @@ public class App {
 
     public void run() {
 
-        userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n " + "2 - Check holiday approval status\n " + "3 - Approve holiday (admin only)\n");
+        userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Request absence\n " + "2 - Check request approval status\n " + "3 - Approve an absence request (admin only)\n");
 
         int selectedOption = Integer.parseInt(checkAndUpdate.selection(userInteractions.customScanner));
 

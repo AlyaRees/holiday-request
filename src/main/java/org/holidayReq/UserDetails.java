@@ -2,35 +2,35 @@ package org.holidayReq;
 
 import java.util.Scanner;
 
-public class GetUserDetails {
+public class UserDetails {
 
     protected String startDate;
     protected String endDate;
     protected String date;
+    private String employeeName;
+    private String employeeNumber;
 
     UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
     CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
 
-    public String getUserName() {
+    public void setEmployeeName() {
         userInteractions.userPrompt("\nEnter your full name:\n");
-        return userInteractions.getUserInputStr();
+        this.employeeName = userInteractions.getUserInputStr();
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
     }
 
     public String getEmployeeNumber() {
-        userInteractions.userPrompt("\nEnter your employee number:\n");
-        // check and update employee number.
-        return checkAndUpdate.employeeNumber(userInteractions.customScanner);
+        return employeeNumber;
     }
 
     public String getStartDate() {
-        userInteractions.userPrompt("\nEnter the date of absence you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
-        this.startDate = checkAndUpdate.date(userInteractions.customScanner);
         return startDate;
     }
 
     public String getEndDate() {
-        userInteractions.userPrompt("\nDate to:\n");
-        this.endDate = checkAndUpdate.date(userInteractions.customScanner);
         return endDate;
     }
 
@@ -53,6 +53,22 @@ public class GetUserDetails {
     public String isDateCorrect() {
         userInteractions.userPrompt("\nDate: " + date + " correct?\n");
         return userInteractions.getUserInputStr();
+    }
+
+    public void setEmployeeNumber() {
+        userInteractions.userPrompt("\nEnter your employee number:\n");
+        // check and update employee number.
+        this.employeeNumber = checkAndUpdate.employeeNumber(userInteractions.customScanner);
+    }
+
+    public void setStartDate() {
+        userInteractions.userPrompt("\nEnter the date of absence you want to book:\n(Use the format DD/MM/YYYY)\n\nDate from:\n");
+        this.startDate = checkAndUpdate.date(userInteractions.customScanner);
+    }
+
+    public void setEndDate() {
+        userInteractions.userPrompt("\nDate to:\n");
+        this.endDate = checkAndUpdate.date(userInteractions.customScanner);
     }
 }
 
