@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 public class App {
 
-    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in));
+    // By using a newline as the delimiter for my scanner I'm specifying that the input ends on the next newline character (when the user hits return).
+    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
     ReadFromFile reader = new ReadFromFile();
     WriteToFile writer = new WriteToFile();
     UpdateFile updateFile = new UpdateFile();

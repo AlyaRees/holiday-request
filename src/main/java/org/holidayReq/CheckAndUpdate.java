@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class CheckAndUpdate {
 
-    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in));
+    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
 
     // gets input from the user, compares it to the given pattern and logs the given message when there is a mismatch.
     public String askForInputAgain(Scanner scanner, String pattern, String message) {

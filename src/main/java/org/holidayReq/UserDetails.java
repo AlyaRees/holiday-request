@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class UserDetails {
 
-    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in));
+    UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
     CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
 
     private String startDate;
