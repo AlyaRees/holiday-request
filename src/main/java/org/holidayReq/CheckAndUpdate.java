@@ -31,6 +31,10 @@ public class CheckAndUpdate {
         return askForInputAgain(scanner, "[1-3]{1}", "\nPlease select a valid option.\n");
     }
 
+    public String approveOrDeclineSelection(Scanner scanner) {
+        return askForInputAgain(scanner, "[1-2]{1}", "\nPlease select a valid option.\n");
+    }
+
     /*
 
     Commonality capture ->

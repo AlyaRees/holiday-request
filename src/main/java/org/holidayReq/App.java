@@ -31,7 +31,7 @@ public class App {
     }
 
     public int getCorrectIndex(int userInputInt) {
-        userInputInt = userInputInt -1;
+        userInputInt = userInputInt - 1;
         return userInputInt;
     }
 
@@ -56,10 +56,11 @@ public class App {
         System.out.println(message);
     }
 
+    // logs each element in an array to the console
     static void displayElements(ArrayList<String> list) {
-        // logs each element in an array to the console
         list.forEach(item -> display(item));
     }
+
 
     private void selectRequestToBook() {
         userInteractions.userPrompt("\nWhat absence would you like to request?\n");
@@ -74,19 +75,23 @@ public class App {
 
     private void bookHoliday() {
 
+        // sets all employee details.
         user.setEmployeeName();
         user.setEmployeeNumber();
         user.setStartDate();
         user.setEndDate();
 
+        // returns a "y" for "yes" or "n" for "no".
         String areDatesCorrect = user.areEnteredDatesCorrect();
 
+        // updates entered dates while they are incorrect.
         while (areDatesCorrect.equalsIgnoreCase("N")) {
             user.setStartDate();
             user.setEndDate();
             areDatesCorrect = user.areEnteredDatesCorrect();
         }
 
+        // saves the request to the file.
         if (areDatesCorrect.equalsIgnoreCase("Y")) {
             Absence holidayRequest = new Holiday(user.getEmployeeName(), user.getEmployeeNumber(), user.getStartDate(), user.getEndDate());
             writer.save(getContent(holidayRequest));
@@ -104,16 +109,20 @@ public class App {
         user.setEmployeeNumber();
         user.setDate();
 
+        // only requires and checks one date (lateness shouldn't exceed more than 7.5 hours (a working day).
         String yesOrNo = user.getCorrectDate();
 
+        // updates date if entered incorrectly.
         while (yesOrNo.equalsIgnoreCase("N")) {
             user.setDate();
             yesOrNo = user.getCorrectDate();
         }
 
+        // collects the reason and hours late
         user.setReason();
         user.setHours();
 
+        // Has the user input the correct hours? "yes" or "no".
         String isEntryCorrect = user.getCorrectHours();
 
         while (isEntryCorrect.equalsIgnoreCase("N")) {
@@ -121,6 +130,7 @@ public class App {
             isEntryCorrect = user.getCorrectHours();
         }
 
+        // if the correct details have been entered, a request object is used to save them to the file in string format.
         if (isEntryCorrect.equalsIgnoreCase("Y")) {
             Absence lateness = new Lateness(user.getEmployeeName(), user.getEmployeeNumber(), user.getDate(), user.getHours(), user.getReason());
             writer.save(lateness.fileContents());
@@ -134,6 +144,7 @@ public class App {
 
     private void bookSickness() {
 
+        // employee details are collected
         user.setEmployeeName();
         user.setEmployeeNumber();
         user.setStartDate();
@@ -142,12 +153,14 @@ public class App {
 
         String areDatesCorrect = user.areEnteredDatesCorrect();
 
+        // makes sure correct details are input. Loops back and asks user to enter them again if they are incorrect.
         while (areDatesCorrect.equalsIgnoreCase("N")) {
             user.setStartDate();
             user.setEndDate();
             areDatesCorrect = user.areEnteredDatesCorrect();
         }
 
+        // saves details to the file.
         if (areDatesCorrect.equalsIgnoreCase("Y")) {
             Absence sickLeaveRequest = new SickLeave(user.getEmployeeName(), user.getEmployeeNumber(), user.getStartDate(), user.getEndDate(), user.getReason());
             writer.save(sickLeaveRequest.fileContents().trim());
@@ -162,6 +175,7 @@ public class App {
     private void adminReviewRequests() {
 
         userInteractions.userPrompt("\nEnter admin password: \n");
+        // gets password input from the user and checks this against required password.
         checkAndUpdate.login(userInteractions.customScanner);
         statusReport("\nLogin successful.");
 
@@ -171,33 +185,31 @@ public class App {
         displayElements(addNumberIDs(fileContent));
 
         // User selects a holiday request, and it is then displayed.
+
+        int selectedHolidayOption = userInteractions.getUserInputInt();
         // makes sure the correct number is used for indexing into the array of absence requests
         // ie the first request is numbered '1', which corresponds to the first element in the array, indexed at 0
-        int selectedHolidayOption = userInteractions.getUserInputInt();
         selectedHolidayOption = selectedHolidayOption - 1;
-        display("selectedHolidayOption" + selectedHolidayOption);
         String selectedRequest = selectHoliday(selectedHolidayOption);
-        display("selectedHolidayOption" + selectedHolidayOption);
         display("\nYou selected:\n");
         display(selectedRequest);
 
         // The option to approve or decline the request
         display("\n1 - Approve\n2 - Decline");
-        int selectedApproveOrDecline = checkAndUpdate.selectionInt(userInteractions.customScanner);
-        display("selectedApproveOrDecline " + selectedApproveOrDecline);
+        // checkAndUpdate makes sure the selected option is valid and in range.
+        int selectedApproveOrDecline = Integer.parseInt(checkAndUpdate.approveOrDeclineSelection(userInteractions.customScanner));
         // The selected request is updated and displayed
         updateFile.holidayStatus(selectedHolidayOption, selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");
-        display("selectedHolidayOption" + selectedHolidayOption);
+        // indexes into the array containing each request and retrieves the selected one by the entered number.
         display(reader.getFileContent().get(selectedHolidayOption));
-        display("selectedHolidayOption" + selectedHolidayOption);
-
     }
 
     public void run() {
 
         userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Request absence\n " + "2 - Check request approval status\n " + "3 - Approve an absence request (admin only)\n");
 
+        // gets input from the user, uses a regular expression tp check whether it's within the selection range
         int selectedOption = Integer.parseInt(checkAndUpdate.selection(userInteractions.customScanner));
 
         switch (selectedOption) {

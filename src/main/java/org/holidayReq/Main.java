@@ -4,6 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Instantiate and go!
         App app = new App();
 
         app.run();
@@ -30,7 +31,7 @@ public class Main {
 
 // Add all your tests
 // Add more comments where appropriate
-// Add more OOP where appropriate
+// Add more OOP where appropriate - Done!
 // Add inheritance in areas that would benefit from it - Done!
 // Add a readme file
 // You'll need to submit a self assessment doc
