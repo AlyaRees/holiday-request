@@ -2,8 +2,6 @@ package org.holidayReq;
 
 import java.util.Scanner;
 
-import static org.holidayReq.App.statusReport;
-
 public class CheckAndUpdate {
 
     UserInteractions userInteractions = new UserInteractions(new Scanner(System.in).useDelimiter("\n"));
@@ -29,6 +27,10 @@ public class CheckAndUpdate {
         return askForInputAgain(scanner, "password", "\nIncorrect password entered.\n");
     }
 
+    public String selection(Scanner scanner) {
+        return askForInputAgain(scanner, "[1-3]{1}", "\nPlease select a valid option.\n");
+    }
+
     /*
 
     Commonality capture ->
@@ -52,7 +54,7 @@ public class CheckAndUpdate {
      */
 
 
-    public int selection(Scanner scanner) {
+    public int selectionInt(Scanner scanner) {
         int userInput = scanner.nextInt();
         while (!(userInput == 1 || userInput == 2)) {
             userInteractions.userPrompt("\nPlease select a valid option.");

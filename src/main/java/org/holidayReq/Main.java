@@ -12,13 +12,9 @@ public class Main {
 
 // Things to add ->
 
-// With duplication - add a base class to reduce duplication
-
+// more tests
 // Add more comments in your code
 
-// you can use some switches (where appropriate) to replace if-else
-// abstract classes
-// you need to create base classes, use inheritance
 
 // overthinking - looking at interfaces and class inheritance to try and solve a problem.
 // Problem - the scanner was skipping 'enter employee number'.
@@ -35,9 +31,9 @@ public class Main {
 // Add all your tests
 // Add more comments where appropriate
 // Add more OOP where appropriate
-// Add inheritance in areas that would benefit from it
+// Add inheritance in areas that would benefit from it - Done!
 // Add a readme file
 // You'll need to submit a self assessment doc
 
-// 1 - 3 additional features (what does that mean?) - mocks (Mockito)
+// 1 - 3 additional features - mocks (Mockito)
 // self-directed code management (Github?) = Yes. Check!

@@ -26,7 +26,7 @@ public class Mocks {
                 .thenReturn(invalidInput)
                 .thenReturn(validInput);
 
-        int result2 = checkAndUpdate.selection(mockScanner);
+        int result2 = checkAndUpdate.selectionInt(mockScanner);
 
         verify(mockScanner, times(2)).nextInt();
         assertEquals(validInput, result2);

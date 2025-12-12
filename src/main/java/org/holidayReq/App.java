@@ -12,6 +12,10 @@ public class App {
     CheckAndUpdate checkAndUpdate = new CheckAndUpdate();
     GetUserDetails user = new GetUserDetails();
 
+    private static String getContent(Absence holidayRequest) {
+        return holidayRequest.fileContents();
+    }
+
     private String selectHoliday(int index) {
         String selectedRequest = "";
         try {
@@ -26,23 +30,6 @@ public class App {
 
     public int getCorrectIndex(int userInputInt) {
         return userInputInt - 1;
-    }
-
-    private void getUserSelection() {
-        int selectedOption = Integer.parseInt(userInteractions.getUserInputStr());
-
-        switch (selectedOption) {
-            case 1 -> selectRequestToBook();
-            case 2 -> {
-                statusReport("\nHoliday approval status:\n");
-                displayElements(reader.getFileContent());
-            }
-            case 3 -> adminReviewRequests();
-            default -> {
-                statusReport("\nInvalid. Try again.\n");
-                getUserSelection();
-            }
-        }
     }
 
     public ArrayList<String> addNumberIDs(ArrayList<String> list) {
@@ -73,20 +60,12 @@ public class App {
     private void selectRequestToBook() {
         userInteractions.userPrompt("\nWhat would you like to book?\n");
         display("1 - Holiday\n" + "2 - Sickness\n" + "3 - Lateness to work\n");
-        int bookingSelectedOption = userInteractions.getUserInputInt();
+        int bookingSelectedOption = Integer.parseInt(checkAndUpdate.selection(userInteractions.customScanner));
         switch (bookingSelectedOption) {
             case 1 -> bookHoliday();
             case 2 -> bookSickness();
             case 3 -> bookLateness();
-            default -> {
-                statusReport("\nPlease select a valid option.");
-                selectRequestToBook();
-            }
         }
-    }
-
-    private static String getContent(Absence holidayRequest) {
-        return holidayRequest.fileContents();
     }
 
     private void bookHoliday() {
@@ -224,7 +203,7 @@ public class App {
 
         // The option to approve or decline the request
         display("\n1 - Approve\n2 - Decline");
-        int selectedApproveOrDecline = checkAndUpdate.selection(userInteractions.customScanner);
+        int selectedApproveOrDecline = checkAndUpdate.selectionInt(userInteractions.customScanner);
         // The selected request is updated and displayed
         updateFile.holidayStatus(selectedHolidayOption, selectedApproveOrDecline);
         display("\nThe following request has been updated:\n");
@@ -235,21 +214,19 @@ public class App {
 
         userInteractions.userPrompt("\nSelect (1) or (2)\n\n 1 - Book holiday\n " + "2 - Check holiday approval status\n " + "3 - Approve holiday (admin only)\n");
 
-        boolean predicate = true;
-        do {
-            try {
-                getUserSelection();
-                predicate = false;
-            } catch (Exception e) {
-                statusReport("\nInvalid. Try again.\n");
+        int selectedOption = Integer.parseInt(checkAndUpdate.selection(userInteractions.customScanner));
+
+        switch (selectedOption) {
+            case 1 -> selectRequestToBook();
+            case 2 -> {
+                statusReport("\nHoliday approval status:\n");
+                displayElements(reader.getFileContent());
             }
-        } while (predicate);
+            case 3 -> adminReviewRequests();
+        }
         userInteractions.closeScanner();
     }
 }
-
-// userInteractions.customScanner.next(); -> should throw an error because we're trying to use the scanner after closing it!
-
 
 // first issue -> scanner doesn't work the way I thought it did...
 // keeps printing the selected number when the code has finished executing.
